@@ -65,24 +65,25 @@ public class WeatherController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public ActionResult<IEnumerable<Weather>> UpdateWeather(int id, Weather weather)
+    public ActionResult<Weather> UpdateWeather(int id, Weather weather)
     {
         if (weatherContext.Weather == null)
         {
             return StatusCode(StatusCodes.Status500InternalServerError, "Weather database not initialized");
         }
-        
+
         var currentWeather = weatherContext.Weather.FirstOrDefault(x => x.ID == id);
         if (currentWeather == null)
         {
             return NotFound();
         }
+
         currentWeather.Temperature = weather.Temperature;
         currentWeather.Humidity = weather.Humidity;
         currentWeather.AirQuality = weather.AirQuality;
-        weatherContext.SaveChanges;
+        weatherContext.SaveChanges();
 
-        return weather.ToList();
+        return weather;
     }
 
     [HttpDelete("{id}")]
@@ -92,7 +93,7 @@ public class WeatherController : ControllerBase
         {
             return StatusCode(StatusCodes.Status500InternalServerError, "Weather database not initialized");
         }
-        
+
         var currentWeather = weatherContext.Weather.FirstOrDefault(x => x.ID == id);
         if (currentWeather == null)
         {
@@ -100,10 +101,9 @@ public class WeatherController : ControllerBase
         }
 
         weatherContext.Weather.Remove(currentWeather);
-        weatherContext.SaveChanges;
+        weatherContext.SaveChanges();
 
         return currentWeather;
     }
-
 }
 
