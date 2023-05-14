@@ -99,7 +99,7 @@ public class WeatherController : ControllerBase
             return NotFound();
         }
 
-        weatherContext.Weather.Remove(currentWeather)
+        weatherContext.Weather.Remove(currentWeather);
         weatherContext.SaveChanges;
 
         return currentWeather;
